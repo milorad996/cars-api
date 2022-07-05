@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCarRequest;
+use App\Http\Requests\UpdateCarRequest;
+use App\Models\Car;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
@@ -13,7 +16,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+        $cars = Car::all();
+        return response()->json($cars);
     }
 
     /**
@@ -22,9 +26,11 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCarRequest $request)
     {
-        //
+        $data = $request->validated();
+        $car = Car::create($data);
+        return response()->json($car);
     }
 
     /**
@@ -33,9 +39,9 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Car $car)
     {
-        //
+        return response()->json($car);
     }
 
     /**
@@ -45,9 +51,12 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $data = $request->validated();
+        $car->update($data);
+
+        return response()->json($car);
     }
 
     /**
@@ -56,8 +65,9 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+        return response(null, 204);
     }
 }
