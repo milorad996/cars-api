@@ -18,10 +18,9 @@ class CarController extends Controller
     {
         $cars = Car::all();
         $per_page = $request->query('per_page', 5);
-        $query = Car::query();
-
-
-        $cars = $query->paginate($per_page);
+        $cars = Car::searchByBrand($request->query('brand'))
+            ->searchByModel($request->query('model'))
+            ->paginate($per_page);
         return response()->json($cars);
     }
 
