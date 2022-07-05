@@ -14,9 +14,14 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $cars = Car::all();
+        $per_page = $request->query('per_page', 5);
+        $query = Car::query();
+
+
+        $cars = $query->paginate($per_page);
         return response()->json($cars);
     }
 
